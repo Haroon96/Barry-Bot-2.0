@@ -4,7 +4,6 @@ from discord.ext import commands
 
 from utils.auth import add_user, is_authorized, list_dynamic_users, remove_user
 
-@app_commands.guild_only()
 class Admin(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -25,6 +24,7 @@ class Admin(commands.Cog):
             return False
         return commands.check(predicate)
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='allow', description='Allow a user to use the bot')
     @app_commands.describe(user='User to add to the allowlist')
     async def allow(self, ctx: commands.Context, user: discord.User):
@@ -38,6 +38,7 @@ class Admin(commands.Cog):
             ephemeral=True,
         )
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='deny', description='Remove a user from the allowlist')
     @app_commands.describe(user='User to remove')
     async def deny(self, ctx: commands.Context, user: discord.User):
@@ -57,6 +58,7 @@ class Admin(commands.Cog):
                 ephemeral=True,
             )
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='allowed', description='Show all users allowed to use the bot')
     async def allowed(self, ctx: commands.Context):
         if not is_authorized(self.bot, ctx.author):
@@ -80,6 +82,7 @@ class Admin(commands.Cog):
 
         await ctx.send(embed=embed, ephemeral=True)
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='reload', description='Reload a bot cog')
     @app_commands.describe(cog='Cog name: torrents, library, jellyfin, requests, admin')
     async def reload(self, ctx: commands.Context, cog: str):
@@ -92,6 +95,7 @@ class Admin(commands.Cog):
         except Exception as exc:
             await ctx.send(f'Failed to reload: {exc}', ephemeral=True)
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='sync', description='Sync slash commands with Discord')
     async def sync(self, ctx: commands.Context):
         if not self._is_owner(ctx.author):
@@ -100,12 +104,14 @@ class Admin(commands.Cog):
         synced = await self.bot.tree.sync()
         await ctx.send(f'Synced {len(synced)} slash command(s).', ephemeral=True)
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='ping', description='Check bot latency')
     async def ping(self, ctx: commands.Context):
         if not is_authorized(self.bot, ctx.author):
             return
         await ctx.send(f'Pong! `{self.bot.latency * 1000:.1f} ms`', ephemeral=True)
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='status', description='Show bot and service status')
     async def status(self, ctx: commands.Context):
         if not is_authorized(self.bot, ctx.author):

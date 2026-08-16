@@ -129,7 +129,6 @@ class ConfirmFileDeleteView(discord.ui.View):
 
 
 # ── Cog ───────────────────────────────────────────────────────────────────────
-@app_commands.guild_only()
 class Torrents(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -167,9 +166,10 @@ class Torrents(commands.Cog):
 
     # ── Commands ───────────────────────────────────────────────────────────────
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='search', description='Search torrents via Jackett/Prowlarr')
     @app_commands.describe(query='Search query', category='Filter: movies, shows, or all')
-    @require_auth()
+    # @require_auth()
     async def search(self, ctx: commands.Context, query: str, category: str = 'all'):
         if category not in CATEGORIES:
             await ctx.send(f'Category must be one of: {", ".join(CATEGORIES)}', ephemeral=True)
@@ -218,6 +218,7 @@ class Torrents(commands.Cog):
         view = SearchResultsView(results, self._download_paths(), qbit)
         await ctx.send(embed=embed, view=view, ephemeral=True)
 
+    @app_commands.guild_only()
     @commands.hybrid_command(
         name='download', description='Download a torrent by magnet link or URL'
     )
@@ -225,7 +226,7 @@ class Torrents(commands.Cog):
         url='Magnet link or direct torrent URL',
         category='Save location: movies, shows, or downloads',
     )
-    @require_auth()
+    # @require_auth()
     async def download(self, ctx: commands.Context, url: str, category: str = 'downloads'):
         qbit = await self._build_qbit()
         if not qbit:
@@ -260,8 +261,9 @@ class Torrents(commands.Cog):
                 allowed_mentions=discord.AllowedMentions(users=False),
             )
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='downloads', description='List current downloads')
-    @require_auth()
+    # @require_auth()
     async def downloads(self, ctx: commands.Context):
         qbit = await self._build_qbit()
         if not qbit:
@@ -308,11 +310,12 @@ class Torrents(commands.Cog):
                 lines.append(f'Done: {truncate(t.name, 50)}')
             await ctx.send('\n'.join(lines), ephemeral=True)
 
+    @app_commands.guild_only()
     @commands.hybrid_command(
         name='dl_remove', description='Remove a download (partial name match)'
     )
     @app_commands.describe(name='Partial torrent name', delete_files='Also delete downloaded files')
-    @require_auth()
+    # @require_auth()
     async def dl_remove(
         self, ctx: commands.Context, name: str, delete_files: bool = False
     ):
@@ -338,15 +341,17 @@ class Torrents(commands.Cog):
         suffix = ' (files deleted)' if delete_files else ''
         await ctx.send(f'Removed **{t.name}**{suffix}.', ephemeral=True)
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='dl_pause', description='Pause a download')
     @app_commands.describe(name='Partial torrent name')
-    @require_auth()
+    # @require_auth()
     async def dl_pause(self, ctx: commands.Context, name: str):
         await self._toggle(ctx, name, pause=True)
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='dl_resume', description='Resume a paused download')
     @app_commands.describe(name='Partial torrent name')
-    @require_auth()
+    # @require_auth()
     async def dl_resume(self, ctx: commands.Context, name: str):
         await self._toggle(ctx, name, pause=False)
 
@@ -373,6 +378,7 @@ class Torrents(commands.Cog):
             await qbit.resume(t.hash)
             await ctx.send(f'Resumed **{t.name}**.', ephemeral=True)
 
+    @app_commands.guild_only()
     @commands.hybrid_command(
         name='delete_from_disk', description='Delete a movie or show downloaded via /search or /download'
     )
@@ -380,7 +386,7 @@ class Torrents(commands.Cog):
         title='File/folder name (partial match ok)',
         category='movies or shows',
     )
-    @require_auth()
+    # @require_auth()
     async def delete_from_disk(self, ctx: commands.Context, title: str, category: str = 'movies'):
         if category not in ('movies', 'shows'):
             await ctx.send('`category` must be `movies` or `shows`.', ephemeral=True)

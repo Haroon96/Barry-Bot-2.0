@@ -8,7 +8,6 @@ from utils.auth import require_auth
 from utils.helpers import truncate
 from utils.plex_client import MediaItem, PlexClient
 
-@app_commands.guild_only()
 class Library(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -44,9 +43,10 @@ class Library(commands.Cog):
             embed.set_footer(text=f'Showing 15 of {len(items)}')
         return embed
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='movies', description='List or search movies in Plex')
     @app_commands.describe(query='Title to search (leave blank for full list)')
-    @require_auth()
+    # @require_auth()
     async def movies(self, ctx: commands.Context, *, query: str = ''):
         plex = await self._build_plex()
         if not plex:
@@ -64,9 +64,10 @@ class Library(commands.Cog):
         label = f'Movies matching "{query}"' if query else 'Movies'
         await ctx.send(embed=self._build_embed(f'{label} ({len(items)})', items), ephemeral=True)
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='shows', description='List or search TV shows in Plex')
     @app_commands.describe(query='Title to search (leave blank for full list)')
-    @require_auth()
+    # @require_auth()
     async def shows(self, ctx: commands.Context, *, query: str = ''):
         plex = await self._build_plex()
         if not plex:
@@ -84,8 +85,9 @@ class Library(commands.Cog):
         label = f'Shows matching "{query}"' if query else 'TV Shows'
         await ctx.send(embed=self._build_embed(f'{label} ({len(items)})', items), ephemeral=True)
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='recent', description='Show recently added media in Plex')
-    @require_auth()
+    # @require_auth()
     async def recent(self, ctx: commands.Context):
         plex = await self._build_plex()
         if not plex:

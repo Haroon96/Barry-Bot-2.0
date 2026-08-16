@@ -310,7 +310,6 @@ class ConfirmRemoveView(discord.ui.View):
 
 
 # ── Cog ───────────────────────────────────────────────────────────────────────
-@app_commands.guild_only()
 class Requests(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -349,9 +348,10 @@ class Requests(commands.Cog):
 
     # ── Commands ───────────────────────────────────────────────────────────────
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='request_movie', description='Request a movie via Radarr')
     @app_commands.describe(query='Movie title to search for')
-    @require_auth()
+    # @require_auth()
     async def request_movie(self, ctx: commands.Context, *, query: str):
         radarr = await self._build_radarr()
         if not radarr:
@@ -390,9 +390,10 @@ class Requests(commands.Cog):
 
         await ctx.send(embed=embed, view=MovieRequestView(results, radarr), ephemeral=True)
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='request_show', description='Request a TV show via Sonarr')
     @app_commands.describe(query='Show title to search for')
-    @require_auth()
+    # @require_auth()
     async def request_show(self, ctx: commands.Context, *, query: str):
         sonarr = await self._build_sonarr()
         if not sonarr:
@@ -431,12 +432,13 @@ class Requests(commands.Cog):
 
         await ctx.send(embed=embed, view=SeriesRequestView(results, sonarr), ephemeral=True)
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='remove_movie', description='Remove a movie from Radarr')
     @app_commands.describe(
         title='Movie title (partial match ok)',
         delete_files='Also delete the downloaded files from disk',
     )
-    @require_auth()
+    # @require_auth()
     async def remove_movie(self, ctx: commands.Context, title: str, delete_files: bool = True):
         radarr = await self._build_radarr()
         if not radarr:
@@ -480,12 +482,13 @@ class Requests(commands.Cog):
             ephemeral=True,
         )
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='remove_show', description='Remove a TV show from Sonarr')
     @app_commands.describe(
         title='Show title (partial match ok)',
         delete_files='Also delete the downloaded files from disk',
     )
-    @require_auth()
+    # @require_auth()
     async def remove_show(self, ctx: commands.Context, title: str, delete_files: bool = True):
         sonarr = await self._build_sonarr()
         if not sonarr:

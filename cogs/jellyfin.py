@@ -8,7 +8,6 @@ from utils.auth import require_auth
 from utils.helpers import truncate
 from utils.jellyfin import JellyfinClient, MediaItem
 
-@app_commands.guild_only()
 class Jellyfin(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -43,9 +42,10 @@ class Jellyfin(commands.Cog):
             embed.set_footer(text=f'Showing 15 of {len(items)}')
         return embed
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='jf_movies', description='List or search movies in Jellyfin')
     @app_commands.describe(query='Title to search (leave blank for full list)')
-    @require_auth()
+    # @require_auth()
     async def jf_movies(self, ctx: commands.Context, *, query: str = ''):
         jellyfin = await self._build_jellyfin()
         if not jellyfin:
@@ -66,9 +66,10 @@ class Jellyfin(commands.Cog):
         label = f'Movies matching "{query}"' if query else 'Movies'
         await ctx.send(embed=self._build_embed(f'{label} ({len(items)})', items), ephemeral=True)
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='jf_shows', description='List or search TV shows in Jellyfin')
     @app_commands.describe(query='Title to search (leave blank for full list)')
-    @require_auth()
+    # @require_auth()
     async def jf_shows(self, ctx: commands.Context, *, query: str = ''):
         jellyfin = await self._build_jellyfin()
         if not jellyfin:
@@ -89,8 +90,9 @@ class Jellyfin(commands.Cog):
         label = f'Shows matching "{query}"' if query else 'TV Shows'
         await ctx.send(embed=self._build_embed(f'{label} ({len(items)})', items), ephemeral=True)
 
+    @app_commands.guild_only()
     @commands.hybrid_command(name='jf_recent', description='Show recently added media in Jellyfin')
-    @require_auth()
+    # @require_auth()
     async def jf_recent(self, ctx: commands.Context):
         jellyfin = await self._build_jellyfin()
         if not jellyfin:
