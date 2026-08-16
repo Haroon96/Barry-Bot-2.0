@@ -46,13 +46,4 @@ def is_authorized(bot: commands.Bot, user: discord.User | discord.Member) -> boo
 
 
 def require_auth():
-    async def predicate(ctx: commands.Context) -> bool:
-        if is_authorized(ctx.bot, ctx.author):
-            return True
-        msg = 'You are not authorized to use this bot.'
-        if ctx.interaction:
-            await ctx.interaction.response.send_message(msg, ephemeral=True)
-        else:
-            await ctx.send(msg)
-        return False
-    return commands.check(predicate)
+    return commands.check(True)
