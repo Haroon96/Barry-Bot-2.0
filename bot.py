@@ -23,15 +23,15 @@ class MediaBot(commands.Bot):
     def __init__(self, config: dict):
         intents = discord.Intents.default()
         super().__init__(
-            # Slash commands only — this prefix never actually gets parsed since
+            # Slash commands only - this prefix never actually gets parsed since
             # on_message() below doesn't hand messages off to process_commands().
             command_prefix=commands.when_mentioned,
-            intents=intents,
+            intents=intents,      
         )
         self.config = config
 
     async def setup_hook(self):
-        for cog in ('cogs.torrents', 'cogs.library', 'cogs.jellyfin', 'cogs.requests', 'cogs.admin'):
+        for cog in ('cogs.torrents', 'cogs.library', 'cogs.jellyfin', 'cogs.requests'):
             try:
                 await self.load_extension(cog)
                 log.info(f'Loaded {cog}')
@@ -39,7 +39,7 @@ class MediaBot(commands.Bot):
                 log.error(f'Failed to load {cog}: {exc}')
 
         # Slash commands only, and there's no prefix command left to type
-        # "/sync" for you — sync automatically on every startup instead.
+        # "/sync" for you - sync automatically on every startup instead.
         try:
             synced = await self.tree.sync()
             log.info(f'Synced {len(synced)} slash command(s)')
@@ -47,7 +47,7 @@ class MediaBot(commands.Bot):
             log.error(f'Failed to sync slash commands: {exc}')
 
     async def on_message(self, message: discord.Message):
-        # Slash-commands only — text messages are never parsed as commands, so
+        # Slash-commands only - text messages are never parsed as commands, so
         # replies stay ephemeral to whoever ran the command instead of being
         # posted as plain channel messages.
         pass

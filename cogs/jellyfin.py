@@ -8,7 +8,7 @@ from utils.auth import require_auth
 from utils.helpers import truncate
 from utils.jellyfin import JellyfinClient, MediaItem
 
-
+@app_commands.guild_only()
 class Jellyfin(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot

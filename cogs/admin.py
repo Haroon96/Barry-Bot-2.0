@@ -4,7 +4,7 @@ from discord.ext import commands
 
 from utils.auth import add_user, is_authorized, list_dynamic_users, remove_user
 
-
+@app_commands.guild_only()
 class Admin(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot

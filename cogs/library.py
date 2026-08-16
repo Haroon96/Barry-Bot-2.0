@@ -8,7 +8,7 @@ from utils.auth import require_auth
 from utils.helpers import truncate
 from utils.plex_client import MediaItem, PlexClient
 
-
+@app_commands.guild_only()
 class Library(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot

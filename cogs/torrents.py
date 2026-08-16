@@ -129,7 +129,7 @@ class ConfirmFileDeleteView(discord.ui.View):
 
 
 # ── Cog ───────────────────────────────────────────────────────────────────────
-
+@app_commands.guild_only()
 class Torrents(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
