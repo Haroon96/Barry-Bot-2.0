@@ -31,7 +31,7 @@ class MediaBot(commands.Bot):
         self.config = config
 
     async def setup_hook(self):
-        for cog in ('cogs.torrents', 'cogs.library', 'cogs.jellyfin', 'cogs.requests'):
+        for cog in ('cogs.torrents', 'cogs.jellyfin', 'cogs.requests'):
             try:
                 await self.load_extension(cog)
                 log.info(f'Loaded {cog}')
