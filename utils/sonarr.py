@@ -92,7 +92,7 @@ class SonarrClient(ArrClient):
             'rootFolderPath': self.root_folder,
             'seasonFolder': True,
             'monitored': True,
-            'addOptions': {'monitor': 'none', 'searchForMissingEpisodes': False},
+            'addOptions': {'monitor': 'missing', 'searchForMissingEpisodes': True},
         })
         try:
             created = await self._post('/api/v3/series', body)
